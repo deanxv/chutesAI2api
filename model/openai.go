@@ -156,6 +156,7 @@ type OpenAIImagesGenerationRequest struct {
 	Prompt         string `json:"prompt"`
 	ResponseFormat string `json:"response_format"`
 	Image          string `json:"image"`
+	Size           string `json:"size"`
 }
 
 type OpenAIImagesGenerationResponse struct {

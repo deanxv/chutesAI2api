@@ -156,7 +156,10 @@ Render 可以直接部署 docker 镜像,不需要 fork 仓库：[Render](https:/
 3. `API_SECRET=123456`  [可选]接口密钥-修改此行为请求头(Authorization)校验的值(同API-KEY)(多个请以,分隔)
 4. `REQUEST_RATE_LIMIT=60`  [可选]每分钟下的单ip请求速率限制,默认:60次/min
 5. `PROXY_URL=http://127.0.0.1:10801`  [可选]代理
-
+6. `DEFAULT_WIDTH=1024` [可选]图片宽度,默认为1024
+7. `DEFAULT_HEIGHT=1024` [可选]图片高度,默认为1024
+8. `DEFAULT_GUIDANCE_SCALE=4` [可选]GUIDANCE_SCALE,默认为4
+9. `DEFAULT_NUM_INFERENCE_STEPS=20` [可选]DEFAULT_NUM_INFERENCE_STEPS,默认为20
 
 ## 报错排查
 
