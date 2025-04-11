@@ -4,6 +4,7 @@ import (
 	"chutesai2api/chutes-api"
 	"chutesai2api/common"
 	"chutesai2api/common/config"
+	"chutesai2api/common/env"
 	logger "chutesai2api/common/loggger"
 	"chutesai2api/model"
 	"encoding/base64"
@@ -651,8 +652,25 @@ func ImageProcess(c *gin.Context, client cycletls.CycleTLS, openAIReq model.Open
 
 func createImageRequestBody(c *gin.Context, openAIReq *model.OpenAIImagesGenerationRequest) (chutes_api.MakeImageReq, error) {
 
+	width := env.String("DEFAULT_WIDTH", "1024")
+	height := env.String("DEFAULT_HEIGHT", "1024")
+	guidanceScale := env.String("DEFAULT_GUIDANCE_SCALE", "4")
+	numInferenceSteps := env.String("DEFAULT_NUM_INFERENCE_STEPS", "20")
+
+	if openAIReq.Size != "" {
+		parts := strings.Split(openAIReq.Size, "x")
+		if len(parts) == 2 {
+			width = parts[0]
+			height = parts[1]
+		}
+	}
+
 	makeImageReq := chutes_api.MakeImageReq{
-		Prompt: openAIReq.Prompt,
+		Prompt:            openAIReq.Prompt,
+		Width:             width,
+		Height:            height,
+		GuidanceScale:     guidanceScale,
+		NumInferenceSteps: numInferenceSteps,
 	}
 
 	logger.Debug(c.Request.Context(), fmt.Sprintf("RequestBody: %v", makeImageReq))

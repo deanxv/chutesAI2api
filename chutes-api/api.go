@@ -70,10 +70,10 @@ func MakeImageRequest(c *gin.Context, client cycletls.CycleTLS, requestData Make
 		{"prompt", requestData.Prompt},
 		{"cord", "/generate"},
 		{"method", "POST"},
-		{"guidance_scale", "4"},
-		{"width", "1024"},
-		{"height", "1024"},
-		{"num_inference_steps", "20"},
+		{"guidance_scale", requestData.GuidanceScale},
+		{"width", requestData.Width},
+		{"height", requestData.Height},
+		{"num_inference_steps", requestData.NumInferenceSteps},
 	}
 
 	for _, field := range fields {
