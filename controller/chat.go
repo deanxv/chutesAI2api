@@ -79,6 +79,14 @@ func handleNonStreamRequest(c *gin.Context, client cycletls.CycleTLS, openAIReq 
 	maxRetries := len(cookies)
 	forbiddenRetryCountMap := make(map[string]int)
 
+	if config.PRE_MESSAGES_JSON != "" {
+		err := openAIReq.PrependMessagesFromJSON(config.PRE_MESSAGES_JSON)
+		if err != nil {
+			c.JSON(500, gin.H{"error": err.Error()})
+			return
+		}
+	}
+
 	for attempt := 0; attempt < maxRetries; attempt++ {
 		cookie := cookies[attempt]
 		requestBody, err := createRequestBody(c, &openAIReq, modelInfo, cookie)
@@ -212,13 +220,6 @@ func createRequestBody(c *gin.Context, openAIReq *model.OpenAIChatCompletionRequ
 	client := cycletls.Init()
 	defer safeClose(client)
 
-	if config.PRE_MESSAGES_JSON != "" {
-		err := openAIReq.PrependMessagesFromJSON(config.PRE_MESSAGES_JSON)
-		if err != nil {
-			return nil, fmt.Errorf("PrependMessagesFromJSON err: %v JSON:%s", err, config.PRE_MESSAGES_JSON)
-		}
-	}
-
 	messages := make([]map[string]interface{}, 0, len(openAIReq.Messages))
 
 	for _, msg := range openAIReq.Messages {
@@ -336,6 +337,14 @@ func handleStreamRequest(c *gin.Context, client cycletls.CycleTLS, openAIReq mod
 
 	maxRetries := len(cookies)
 	forbiddenRetryCountMap := make(map[string]int)
+
+	if config.PRE_MESSAGES_JSON != "" {
+		err := openAIReq.PrependMessagesFromJSON(config.PRE_MESSAGES_JSON)
+		if err != nil {
+			c.JSON(500, gin.H{"error": err.Error()})
+			return
+		}
+	}
 
 	c.Stream(func(w io.Writer) bool {
 		for attempt := 0; attempt < maxRetries; attempt++ {
